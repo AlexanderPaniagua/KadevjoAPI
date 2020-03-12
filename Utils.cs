@@ -8,6 +8,10 @@ using System.Threading.Tasks;
 
 namespace KadevjoAPI
 {
+    public class APIResp {
+        public string message { get; set; }
+        public string subtitle { get; set; }
+    }
     public static class Utils
     {
         private static string baseUrl = "https://foaas.com/";
@@ -18,7 +22,10 @@ namespace KadevjoAPI
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 HttpResponseMessage HttpResponseMessageRes = await client.GetAsync($"look/{subtitle}/{from}");
-                subtitle = HttpResponseMessageRes.IsSuccessStatusCode ? HttpResponseMessageRes.Content.ReadAsStringAsync().Result : subtitle;
+                if (HttpResponseMessageRes.IsSuccessStatusCode) {
+                    var res = HttpResponseMessageRes.Content.ReadAsStringAsync().Result;
+                    subtitle = JsonConvert.DeserializeObject<APIResp>(res).message;
+                }
             }
             return subtitle;
         }
