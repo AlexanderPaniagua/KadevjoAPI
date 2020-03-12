@@ -11,18 +11,14 @@ namespace KadevjoAPI
     public static class Utils
     {
         private static string baseUrl = "https://foaas.com/";
-        //https://foaas.com/look/the%20subtitle/alex
         
         public static async Task<string> getNewSubtitleAsync(string subtitle = "", string from = "Alex") {
             using (var client = new HttpClient()) {
                 client.BaseAddress = new Uri(baseUrl);
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                HttpResponseMessage Res = await client.GetAsync($"look/{subtitle}/{from}");
-                if (Res.IsSuccessStatusCode)
-                {
-                    subtitle = Res.Content.ReadAsStringAsync().Result;
-                }
+                HttpResponseMessage HttpResponseMessageRes = await client.GetAsync($"look/{subtitle}/{from}");
+                subtitle = HttpResponseMessageRes.IsSuccessStatusCode ? HttpResponseMessageRes.Content.ReadAsStringAsync().Result : subtitle;
             }
             return subtitle;
         }

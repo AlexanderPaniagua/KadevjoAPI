@@ -57,6 +57,7 @@ namespace KadevjoAPI.Controllers
 
             try
             {
+                post.Subtitle = await Utils.getNewSubtitleAsync(post.Subtitle);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -80,6 +81,7 @@ namespace KadevjoAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Post>> PostPost(Post post)
         {
+            post.Subtitle = await Utils.getNewSubtitleAsync(post.Subtitle);
             _context.Posts.Add(post);
             await _context.SaveChangesAsync();
 
